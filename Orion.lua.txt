@@ -12,12 +12,12 @@ local OrionLib = {
 	Flags = {},
 	Themes = {
 		Default = {
-			Main = Color3.fromRGB(25, 25, 25),
-			Second = Color3.fromRGB(32, 32, 32),
-			Stroke = Color3.fromRGB(60, 60, 60),
-			Divider = Color3.fromRGB(60, 60, 60),
-			Text = Color3.fromRGB(240, 240, 240),
-			TextDark = Color3.fromRGB(150, 150, 150)
+			Main = Color3.fromRGB(15, 15, 15),
+            Second = Color3.fromRGB(30, 0, 0),
+            Stroke = Color3.fromRGB(180, 0, 0),
+            Divider = Color3.fromRGB(80, 0, 0),
+            Text = Color3.fromRGB(255, 240, 240),
+            TextDark = Color3.fromRGB(180, 100, 100)
 		}
 	},
 	SelectedTheme = "Default",
@@ -598,19 +598,11 @@ function OrionLib:MakeWindow(WindowConfig)
 	}), "Stroke")
 
 	local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 10), {
-    Parent = Orion,
-    Position = UDim2.new(0.5, -307, 0.5, -172),
-    Size = UDim2.new(0, 615, 0, 344),
-    ClipsDescendants = true
-}), {
-    MakeElement("Image", {
-        Name = "CustomBackground",
-        Size = UDim2.new(1, 0, 1, 0),
-        Position = UDim2.new(0, 0, 0, 0),
-        Image = "rbxassetid://6421296794", 
-        ImageTransparency = 0.3, 
-        ZIndex = 0
-    }),
+		Parent = Orion,
+		Position = UDim2.new(0.5, -307, 0.5, -172),
+		Size = UDim2.new(0, 615, 0, 344),
+		ClipsDescendants = true
+	}), {
 		--SetProps(MakeElement("Image", "rbxassetid://3523728077"), {
 		--	AnchorPoint = Vector2.new(0.5, 0.5),
 		--	Position = UDim2.new(0.5, 0, 0.5, 0),
