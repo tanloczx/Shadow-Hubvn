@@ -648,15 +648,14 @@ local LedBorder = Instance.new("UIStroke")
 LedBorder.Name = "LedBorder"
 LedBorder.Thickness = 2
 LedBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-LedBorder.Color = Color3.fromRGB(255, 0, 0)
 LedBorder.Parent = MainWindow
 
 task.spawn(function()
     while true do
-        LedBorder.Color = Color3.fromRGB(255, 0, 0)
-        task.wait(0.5)
-        LedBorder.Color = Color3.fromRGB(255, 255, 255)
-        task.wait(0.5)
+        local Speed = 2
+        local Hue = (tick() * Speed) % 1
+        LedBorder.Color = Color3.fromHSV(Hue, 1, 1)
+        task.wait()
     end
 end)
 
