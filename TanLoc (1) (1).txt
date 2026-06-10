@@ -608,8 +608,8 @@ function OrionLib:MakeWindow(WindowConfig)
 		SetProps(MakeElement("Image", "rbxassetid://115912682047360"), {
 			Name = "CustomBackground",
 			Size = UDim2.new(1, 0, 1, 0),
-			ZIndex = 0,
-			ImageTransparency = 0.2, 
+			ZIndex = 1, 
+			ImageTransparency = 0.4, 
 			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
 			BackgroundTransparency = 1
 		}),
@@ -652,7 +652,7 @@ LedBorder.Parent = MainWindow
 
 task.spawn(function()
     while true do
-        local Speed = 2
+        local Speed = 1
         local Hue = (tick() * Speed) % 1
         LedBorder.Color = Color3.fromHSV(Hue, 1, 1)
         task.wait()
