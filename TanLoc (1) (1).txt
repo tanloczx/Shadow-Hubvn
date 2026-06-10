@@ -775,7 +775,7 @@ end)
 			TabFrame.Ico.Image = GetIcon(TabConfig.Icon)
 		end	
 
-		local Container = AddThemeObject(SetChildren(SetProps(MakeElement("ScrollFrame", Color3.fromRGB(255, 255, 255), 5), {
+				local Container = AddThemeObject(SetChildren(SetProps(MakeElement("ScrollFrame", Color3.fromRGB(255, 255, 255), 5), {
 			Size = UDim2.new(1, -150, 1, -50),
 			Position = UDim2.new(0, 150, 0, 50),
 			Parent = MainWindow,
@@ -783,8 +783,51 @@ end)
 			Name = "ItemContainer"
 		}), {
 			MakeElement("List", 0, 6),
-			MakeElement("Padding", 15, 10, 10, 15)
+			MakeElement("Padding", 15, 10, 10, 45)
 		}), "Divider")
+
+		local SearchBarFrame = Instance.new("Frame")
+		local SearchInput = Instance.new("TextBox")
+		local SearchCorner = Instance.new("UICorner")
+
+		SearchBarFrame.Name = "SearchBarFrame"
+		SearchBarFrame.Size = UDim2.new(1, -20, 0, 30)
+		SearchBarFrame.Position = UDim2.new(0, 10, 0, 5)
+		SearchBarFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+		SearchBarFrame.Parent = Container
+
+		SearchCorner.CornerRadius = UDim.new(0, 6)
+		SearchCorner.Parent = SearchBarFrame
+
+		SearchInput.Name = "SearchInput"
+		SearchInput.Size = UDim2.new(1, -10, 1, 0)
+		SearchInput.Position = UDim2.new(0, 10, 0, 0)
+		SearchInput.BackgroundTransparency = 1
+		SearchInput.Text = ""
+		SearchInput.PlaceholderText = "Tìm kiếm tính năng..."
+		SearchInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+		SearchInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+		SearchInput.TextXAlignment = Enum.TextXAlignment.Left
+		SearchInput.TextSize = 14
+		SearchInput.Font = Enum.Font.SourceSans
+		SearchInput.Parent = SearchBarFrame
+
+		SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
+			local Query = string.lower(SearchInput.Text)
+			for _, Element in ipairs(Container:GetChildren()) do
+				if Element:IsA("Frame") and Element ~= SearchBarFrame then
+					local TitleLabel = Element:FindFirstChild("Title") or Element:FindFirstChildWhichIsA("TextLabel", true)
+					if TitleLabel then
+						local Text = string.lower(TitleLabel.Text)
+						if string.find(Text, Query) then
+							Element.Visible = true
+						else
+							Element.Visible = false
+						end
+					end
+				end
+			end
+		end)
 
 		AddConnection(Container.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
 			Container.CanvasSize = UDim2.new(0, 0, 0, Container.UIListLayout.AbsoluteContentSize.Y + 30)
