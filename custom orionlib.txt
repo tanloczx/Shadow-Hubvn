@@ -697,13 +697,13 @@ end)
 			WindowStuff.Visible = true
 			WindowTopBarLine.Visible = true
 		else
-			MainWindow.ClipsDescendants = true
-			WindowTopBarLine.Visible = false
+			MainWindow.ClipsDescendants = false
+			WindowTopBarLine.Visible = true
 			MinimizeBtn.Ico.Image = "rbxassetid://7072720870"
 
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, WindowName.TextBounds.X + 140, 0, 50)}):Play()
+			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 540, 0, 320)}):Play()
 			task.wait(0.1)
-			WindowStuff.Visible = false	
+			WindowStuff.Visible = true	
 		end
 		Minimized = not Minimized    
 	end)
