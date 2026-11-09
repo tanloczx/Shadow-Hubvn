@@ -623,7 +623,7 @@ local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame",
 		}),
 		
 		SetChildren(SetProps(MakeElement("TFrame"), {
-			Size = UDim2.new(1, 0, 0, 30),
+			Size = UDim2.new(1, 0, 0, 40),
 			Name = "TopBar"
 		}), {
 			WindowName,
