@@ -690,8 +690,13 @@ end)
 
 	AddConnection(MinimizeBtn.MouseButton1Up, function()
 		if Minimized then
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 480, 0, 280)}):Play()
-			MinimizeBtn.Ico.Image = "rbxassetid://7072719338"
+			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+				Size = UDim2.new(0, 480, 0, 280),
+				Position = UDim2.new(0.5, -240, 0.5, -140)
+			}):Play()
+			
+			MinimizeBtn.Ico.Image = "rbxassetid://7072720870"
+			
 			task.wait(0.02)
 			MainWindow.ClipsDescendants = false
 			WindowStuff.Visible = true
@@ -699,9 +704,14 @@ end)
 		else
 			MainWindow.ClipsDescendants = false
 			WindowTopBarLine.Visible = true
-			MinimizeBtn.Ico.Image = "rbxassetid://7072720870"
+			
+			MinimizeBtn.Ico.Image = "rbxassetid://7072719338"
 
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 540, 0, 320)}):Play()
+			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
+				Size = UDim2.new(0, 580, 0, 330),
+				Position = UDim2.new(0.5, -290, 0.5, -165)
+			}):Play()
+			
 			task.wait(0.1)
 			WindowStuff.Visible = true	
 		end
