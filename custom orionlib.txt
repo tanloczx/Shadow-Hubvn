@@ -490,12 +490,11 @@ function OrionLib:MakeWindow(WindowConfig)
 	end
 
 	local TabHolder = AddThemeObject(SetChildren(SetProps(MakeElement("ScrollFrame", Color3.fromRGB(255, 255, 255), 4), {
-    Size = UDim2.new(1, 0, 1, -30),
-    Position = UDim2.new(0, 0, 0, 30)
-}), {
-    MakeElement("List"),
-    MakeElement("Padding", 8, 0, 0, 8)
-}), "Divider")
+		Size = UDim2.new(1, 0, 1, -30),
+	}), {
+		MakeElement("List"),
+		MakeElement("Padding", 8, 0, 0, 8)
+	}), "Divider")
 
 	local CloseBtn = SetChildren(SetProps(MakeElement("Button"), {
 		Size = UDim2.new(0.5, 0, 1, 0),
