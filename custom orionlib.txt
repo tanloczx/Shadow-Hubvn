@@ -362,7 +362,7 @@ CreateElement("Label", function(Text, TextSize, Transparency)
 		Text = Text or "",
 		TextColor3 = Color3.fromRGB(240, 240, 240),
 		TextTransparency = Transparency or 0,
-		TextSize = TextSize or 14,
+		TextSize = TextSize or 10,
 		Font = Enum.Font.GothamBold,
 		RichText = true,
 		BackgroundTransparency = 1,
@@ -421,7 +421,7 @@ function OrionLib:MakeNotification(NotificationConfig)
 			SetProps(MakeElement("Label", NotificationConfig.Content, 14), {
 				Size = UDim2.new(1, 0, 0, 0),
 				Position = UDim2.new(0, 0, 0, 25),
-				Font = Enum.Font.GothamSemibold,
+				Font = Enum.Font.GothamBold,
 				Name = "Content",
 				AutomaticSize = Enum.AutomaticSize.Y,
 				TextColor3 = Color3.fromRGB(200, 200, 200),
@@ -586,9 +586,9 @@ function OrionLib:MakeWindow(WindowConfig)
 	}), "Second")
 
 	local WindowName = AddThemeObject(SetProps(MakeElement("Label", WindowConfig.Name, 14), {
-		Size = UDim2.new(1, -30, 2, 0),
+		Size = UDim2.new(1, -16, 0, 34)
 		Position = UDim2.new(0, 25, 0, -24),
-		Font = Enum.Font.GothamBlack,
+		Font = Enum.Font.GothamBold,		
 		TextSize = 20
 	}), "Text")
 
@@ -606,10 +606,10 @@ function OrionLib:MakeWindow(WindowConfig)
 }
 local RandomBackground = BackgroundList[math.random(1, #BackgroundList)]
 
-local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 10), {
+Local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 10), {
 		Parent = Orion,
-		Position = UDim2.new(0.5, -307, 0.5, -172),
-		Size = UDim2.new(0, 615, 0, 344),
+		Position = UDim2.new(0.5, -240, 0.5, -140),
+		Size = UDim2.new(0, 480, 0, 280),
 		ClipsDescendants = true,
 		BackgroundTransparency = 1
 	}), {
