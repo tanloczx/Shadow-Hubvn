@@ -584,37 +584,6 @@ function OrionLib:MakeWindow(WindowConfig)
 		TextSize = 20
 	}), "Text")
 	
-		CloseSearchBtn.MouseButton1Click:Connect(function()
-			TweenService:Create(SearchContainer, TweenInfo.new(0.20, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 32)}):Play()
-			task.delay(0.2, function()
-				SearchContainer.Visible = false
-				SearchBtn.Visible = true
-				SearchInput.Text = ""
-			end)
-			for _, Element in ipairs(Container:GetChildren()) do
-				if Element:IsA("Frame") then
-					Element.Visible = true
-				end
-			end
-		end)
-
-		SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
-			local Query = string.lower(SearchInput.Text)
-			for _, Element in ipairs(Container:GetChildren()) do
-				if Element:IsA("Frame") and Element.Name ~= "SearchContainer" then
-					local TitleLabel = Element:FindFirstChild("Content") or Element:FindFirstChildWhichIsA("TextLabel", true)
-					if TitleLabel then
-						local Text = string.lower(TitleLabel.Text)
-						if string.find(Text, Query) or Query == "" then
-							Element.Visible = true
-						else
-							Element.Visible = false
-						end
-					end
-				end
-			end
-		end)
-		
 	local WindowTopBarLine = AddThemeObject(SetProps(MakeElement("Frame"), {
 		Size = UDim2.new(1, 0, 0, 1),
 		Position = UDim2.new(0, 0, 1, -1)
@@ -631,11 +600,12 @@ local RandomBackground = BackgroundList[math.random(1, #BackgroundList)]
 
 local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 10), {
 		Parent = Orion,
-		Position = UDim2.new(0.5, -240, 0.5, -140),
-		Size = UDim2.new(0, 480, 0, 280),
+		Position = UDim2.new(0.5, -307, 0.5, -172),
+		Size = UDim2.new(0, 615, 0, 344),
 		ClipsDescendants = true,
 		BackgroundTransparency = 1
 	}), {
+	
 		SetProps(MakeElement("Image", RandomBackground), {
 			Name = "CustomBackground",
 			Size = UDim2.new(1, 0, 1, 0),
@@ -646,14 +616,14 @@ local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame",
 		}),
 		
 		SetChildren(SetProps(MakeElement("TFrame"), {
-			Size = UDim2.new(1, 0, 0, 40),
+			Size = UDim2.new(1, 0, 0, 50),
 			Name = "TopBar"
 		}), {
 			WindowName,
 			WindowTopBarLine,
-			AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 6), {
-				Size = UDim2.new(0, 65, 0, 20),
-				Position = UDim2.new(1, -80, 0, 5)
+			AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 7), {
+				Size = UDim2.new(0, 70, 0, 30),
+				Position = UDim2.new(1, -90, 0, 10)
 			}), {
 				AddThemeObject(MakeElement("Stroke"), "Stroke"),
 				AddThemeObject(SetProps(MakeElement("Frame"), {
@@ -712,31 +682,21 @@ end)
 	end)
 
 	AddConnection(MinimizeBtn.MouseButton1Up, function()
-		if not Minimized then
-			MainWindow.ClipsDescendants = false
-			WindowTopBarLine.Visible = true
-			
+		if Minimized then
+			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 615, 0, 344)}):Play()
 			MinimizeBtn.Ico.Image = "rbxassetid://7072719338"
-
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-				Size = UDim2.new(0, 580, 0, 330),
-				Position = UDim2.new(0.5, -290, 0.5, -165)
-			}):Play()
-			
-			task.wait(0.1)
-			WindowStuff.Visible = true	
-		else
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
-				Size = UDim2.new(0, 480, 0, 280),
-				Position = UDim2.new(0.5, -240, 0.5, -140)
-			}):Play()
-			
-			MinimizeBtn.Ico.Image = "rbxassetid://7072720870"
-			
-			task.wait(0.02)
+			wait(.02)
 			MainWindow.ClipsDescendants = false
 			WindowStuff.Visible = true
 			WindowTopBarLine.Visible = true
+		else
+			MainWindow.ClipsDescendants = true
+			WindowTopBarLine.Visible = false
+			MinimizeBtn.Ico.Image = "rbxassetid://7072720870"
+
+			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, WindowName.TextBounds.X + 140, 0, 50)}):Play()
+			wait(0.1)
+			WindowStuff.Visible = false	
 		end
 		Minimized = not Minimized    
 	end)
@@ -819,8 +779,8 @@ end)
 			MakeElement("List", 0, 6),
 			MakeElement("Padding", 15, 10, 10, 45)
 		}), "Divider")
-		
-local SearchBarFrame = Instance.new("Frame")
+
+		local SearchBarFrame = Instance.new("Frame")
 		local SearchInput = Instance.new("TextBox")
 		local SearchCorner = Instance.new("UICorner")
 
