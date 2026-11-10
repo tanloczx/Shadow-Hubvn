@@ -797,40 +797,91 @@ end)
 			MakeElement("Padding", 15, 10, 10, 45)
 		}), "Divider")
 
-		local SearchBarFrame = Instance.new("Frame")
+				local SearchBtn = Instance.new("ImageButton")
+		local SearchContainer = Instance.new("Frame")
 		local SearchInput = Instance.new("TextBox")
+		local SearchIcon = Instance.new("ImageLabel")
+		local CloseSearchBtn = Instance.new("ImageButton")
 		local SearchCorner = Instance.new("UICorner")
 
-		SearchBarFrame.Name = "SearchBarFrame"
-		SearchBarFrame.Size = UDim2.new(1, -20, 0, 30)
-		SearchBarFrame.Position = UDim2.new(0, 10, 0, 5)
-		SearchBarFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-		SearchBarFrame.Parent = Container
+		SearchBtn.Name = "SearchBtn"
+		SearchBtn.Size = UDim2.new(0, 24, 0, 24)
+		SearchBtn.Position = UDim2.new(1, -75, 0, 8)
+		SearchBtn.BackgroundTransparency = 1
+		SearchBtn.Image = "rbxassetid://6034818372"
+		SearchBtn.ImageColor3 = Color3.fromRGB(200, 200, 200)
+		SearchBtn.Parent = TopBar
 
-		SearchCorner.CornerRadius = UDim.new(0, 10)
-		SearchCorner.Parent = SearchBarFrame
+		SearchContainer.Name = "SearchContainer"
+		SearchContainer.Size = UDim2.new(0, 0, 0, 32)
+		SearchContainer.Position = UDim2.new(1, -10, 0, 4)
+		SearchContainer.AnchorPoint = Vector2.new(1, 0)
+		SearchContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		SearchContainer.Visible = false
+		SearchContainer.ClipsDescendants = true
+		SearchContainer.Parent = TopBar
+
+		SearchCorner.CornerRadius = UDim.new(0, 6)
+		SearchCorner.Parent = SearchContainer
+
+		SearchIcon.Name = "SearchIcon"
+		SearchIcon.Size = UDim2.new(0, 16, 0, 16)
+		SearchIcon.Position = UDim2.new(0, 8, 0.5, -8)
+		SearchIcon.BackgroundTransparency = 1
+		SearchIcon.Image = "rbxassetid://6034818372"
+		SearchIcon.ImageColor3 = Color3.fromRGB(150, 150, 150)
+		SearchIcon.Parent = SearchContainer
 
 		SearchInput.Name = "SearchInput"
-		SearchInput.Size = UDim2.new(1, -10, 1, 0)
-		SearchInput.Position = UDim2.new(0, 10, 0, 0)
+		SearchInput.Size = UDim2.new(1, -60, 1, 0)
+		SearchInput.Position = UDim2.new(0, 30, 0, 0)
 		SearchInput.BackgroundTransparency = 1
 		SearchInput.Text = ""
 		SearchInput.PlaceholderText = "Tìm kiếm tính năng..."
 		SearchInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-		SearchInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+		SearchInput.PlaceholderColor3 = Color3.fromRGB(130, 130, 130)
 		SearchInput.TextXAlignment = Enum.TextXAlignment.Left
-		SearchInput.TextSize = 14
-		SearchInput.Font = Enum.Font.SourceSans
-		SearchInput.Parent = SearchBarFrame
+		SearchInput.TextSize = 13
+		SearchInput.Font = Enum.Font.GothamMedium
+		SearchInput.Parent = SearchContainer
+
+		CloseSearchBtn.Name = "CloseSearchBtn"
+		CloseSearchBtn.Size = UDim2.new(0, 20, 0, 20)
+		CloseSearchBtn.Position = UDim2.new(1, -25, 0.5, -10)
+		CloseSearchBtn.BackgroundTransparency = 1
+		CloseSearchBtn.Image = "rbxassetid://6035047409"
+		CloseSearchBtn.ImageColor3 = Color3.fromRGB(180, 180, 180)
+		CloseSearchBtn.Parent = SearchContainer
+
+		SearchBtn.MouseButton1Click:Connect(function()
+			SearchBtn.Visible = false
+			SearchContainer.Visible = true
+			TweenService:Create(SearchContainer, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 220, 0, 32)}):Play()
+			SearchInput:CaptureFocus()
+		end)
+
+		CloseSearchBtn.MouseButton1Click:Connect(function()
+			TweenService:Create(SearchContainer, TweenInfo.new(0.20, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 32)}):Play()
+			task.delay(0.2, function()
+				SearchContainer.Visible = false
+				SearchBtn.Visible = true
+				SearchInput.Text = ""
+			end)
+			for _, Element in ipairs(Container:GetChildren()) do
+				if Element:IsA("Frame") then
+					Element.Visible = true
+				end
+			end
+		end)
 
 		SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
 			local Query = string.lower(SearchInput.Text)
 			for _, Element in ipairs(Container:GetChildren()) do
-				if Element:IsA("Frame") and Element ~= SearchBarFrame then
-					local TitleLabel = Element:FindFirstChild("Title") or Element:FindFirstChildWhichIsA("TextLabel", true)
+				if Element:IsA("Frame") and Element.Name ~= "SearchContainer" then
+					local TitleLabel = Element:FindFirstChild("Content") or Element:FindFirstChildWhichIsA("TextLabel", true)
 					if TitleLabel then
 						local Text = string.lower(TitleLabel.Text)
-						if string.find(Text, Query) then
+						if string.find(Text, Query) or Query == "" then
 							Element.Visible = true
 						else
 							Element.Visible = false
@@ -932,11 +983,11 @@ end)
 				end
 				return ParagraphFunction
 			end    
-			function ElementFunction:AddButton(ButtonConfig)
+				function ElementFunction:AddButton(ButtonConfig)
 				ButtonConfig = ButtonConfig or {}
 				ButtonConfig.Name = ButtonConfig.Name or "Button"
 				ButtonConfig.Callback = ButtonConfig.Callback or function() end
-				ButtonConfig.Icon = ButtonConfig.Icon or "rbxassetid://3944703587"
+				ButtonConfig.Icon = ButtonConfig.Icon or "rbxassetid://6034818372"
 
 				local Button = {}
 
@@ -945,19 +996,20 @@ end)
 				})
 
 				local ButtonFrame = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 5), {
-					Size = UDim2.new(1, 0, 0, 33),
+					Size = UDim2.new(1, 0, 0, 38),
 					Parent = ItemParent
 				}), {
-					AddThemeObject(SetProps(MakeElement("Label", ButtonConfig.Name, 15), {
-						Size = UDim2.new(1, -12, 1, 0),
+					AddThemeObject(SetProps(MakeElement("Label", ButtonConfig.Name, 14), {
+						Size = UDim2.new(1, -45, 1, 0),
 						Position = UDim2.new(0, 12, 0, 0),
 						Font = Enum.Font.GothamBold,
 						Name = "Content"
 					}), "Text"),
 					AddThemeObject(SetProps(MakeElement("Image", ButtonConfig.Icon), {
-						Size = UDim2.new(0, 20, 0, 20),
-						Position = UDim2.new(1, -30, 0, 7),
-					}), "TextDark"),
+						Size = UDim2.new(0, 16, 0, 16),
+						Position = UDim2.new(1, -26, 0.5, -8),
+						ImageTransparency = 0.4
+					}), "Text"),
 					AddThemeObject(MakeElement("Stroke"), "Stroke"),
 					Click
 				}), "Second")
