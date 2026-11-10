@@ -583,246 +583,7 @@ function OrionLib:MakeWindow(WindowConfig)
 		Font = Enum.Font.GothamBlack,
 		TextSize = 20
 	}), "Text")
-
-	local WindowTopBarLine = AddThemeObject(SetProps(MakeElement("Frame"), {
-		Size = UDim2.new(1, 0, 0, 1),
-		Position = UDim2.new(0, 0, 1, -1)
-	}), "Stroke")
-
-	local BackgroundList = {
-	"rbxassetid://115912682047360",
-	"rbxassetid://117563606257099",
-	"rbxassetid://92816250109396",
-	"rbxassetid://84706039674981",
-	"rbxassetid://137831072631183"
-}
-local RandomBackground = BackgroundList[math.random(1, #BackgroundList)]
-
-local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 10), {
-		Parent = Orion,
-		Position = UDim2.new(0.5, -307, 0.5, -172),
-		Size = UDim2.new(0, 615, 0, 344),
-		ClipsDescendants = true,
-		BackgroundTransparency = 1
-	}), {
 	
-		SetProps(MakeElement("Image", RandomBackground), {
-			Name = "CustomBackground",
-			Size = UDim2.new(1, 0, 1, 0),
-			ZIndex = 1, 
-			ImageTransparency = 0.4, 
-			BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-			BackgroundTransparency = 1
-		}),
-		
-		SetChildren(SetProps(MakeElement("TFrame"), {
-			Size = UDim2.new(1, 0, 0, 50),
-			Name = "TopBar"
-		}), {
-			WindowName,
-			WindowTopBarLine,
-			AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 7), {
-				Size = UDim2.new(0, 70, 0, 30),
-				Position = UDim2.new(1, -90, 0, 10)
-			}), {
-				AddThemeObject(MakeElement("Stroke"), "Stroke"),
-				AddThemeObject(SetProps(MakeElement("Frame"), {
-					Size = UDim2.new(0, 1, 1, 0),
-					Position = UDim2.new(0.5, 0, 0, 0)
-				}), "Stroke"), 
-				CloseBtn,
-				MinimizeBtn
-			}), "Second"), 
-		}),
-		DragPoint,
-		WindowStuff
-	}), "Main")
-
-local LedBorder = Instance.new("UIStroke")
-LedBorder.Name = "LedBorder"
-LedBorder.Thickness = 2
-LedBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-LedBorder.Parent = MainWindow
-
-task.spawn(function()
-    while true do
-        local Speed = 1
-        local Hue = (tick() * Speed) % 1
-        LedBorder.Color = Color3.fromHSV(Hue, 1, 1)
-        task.wait()
-    end
-end)
-
-	if WindowConfig.ShowIcon then
-		WindowName.Position = UDim2.new(0, 50, 0, -24)
-		local WindowIcon = SetProps(MakeElement("Image", WindowConfig.Icon), {
-			Size = UDim2.new(0, 20, 0, 20),
-			Position = UDim2.new(0, 25, 0, 15)
-		})
-		WindowIcon.Parent = MainWindow.TopBar
-	end	
-
-	AddDraggingFunctionality(DragPoint, MainWindow)
-
-	AddConnection(CloseBtn.MouseButton1Up, function()
-		MainWindow.Visible = false
-		UIHidden = true
-		OrionLib:MakeNotification({
-			Name = "Interface Hidden",
-			Content = "Tap RightShift to reopen the interface",
-			Time = 5
-		})
-		WindowConfig.CloseCallback()
-	end)
-
-	AddConnection(UserInputService.InputBegan, function(Input)
-		if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden then
-			MainWindow.Visible = true
-		end
-	end)
-
-	AddConnection(MinimizeBtn.MouseButton1Up, function()
-		if Minimized then
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 615, 0, 344)}):Play()
-			MinimizeBtn.Ico.Image = "rbxassetid://7072719338"
-			wait(.02)
-			MainWindow.ClipsDescendants = false
-			WindowStuff.Visible = true
-			WindowTopBarLine.Visible = true
-		else
-			MainWindow.ClipsDescendants = true
-			WindowTopBarLine.Visible = false
-			MinimizeBtn.Ico.Image = "rbxassetid://7072720870"
-
-			TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, WindowName.TextBounds.X + 140, 0, 50)}):Play()
-			wait(0.1)
-			WindowStuff.Visible = false	
-		end
-		Minimized = not Minimized    
-	end)
-
-	local function LoadSequence()
-		MainWindow.Visible = false
-		local LoadSequenceLogo = SetProps(MakeElement("Image", WindowConfig.IntroIcon), {
-			Parent = Orion,
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 0, 0.4, 0),
-			Size = UDim2.new(0, 28, 0, 28),
-			ImageColor3 = Color3.fromRGB(255, 255, 255),
-			ImageTransparency = 1
-		})
-
-		local LoadSequenceText = SetProps(MakeElement("Label", WindowConfig.IntroText, 14), {
-			Parent = Orion,
-			Size = UDim2.new(1, 0, 1, 0),
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 19, 0.5, 0),
-			TextXAlignment = Enum.TextXAlignment.Center,
-			Font = Enum.Font.GothamBold,
-			TextTransparency = 1
-		})
-
-		TweenService:Create(LoadSequenceLogo, TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {ImageTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
-		wait(0.8)
-		TweenService:Create(LoadSequenceLogo, TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, -(LoadSequenceText.TextBounds.X/2), 0.5, 0)}):Play()
-		wait(0.3)
-		TweenService:Create(LoadSequenceText, TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
-		wait(2)
-		TweenService:Create(LoadSequenceText, TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
-		MainWindow.Visible = true
-		LoadSequenceLogo:Destroy()
-		LoadSequenceText:Destroy()
-	end 
-
-	if WindowConfig.IntroEnabled then
-		LoadSequence()
-	end	
-
-	local TabFunction = {}
-	function TabFunction:MakeTab(TabConfig)
-		TabConfig = TabConfig or {}
-		TabConfig.Name = TabConfig.Name or "Tab"
-		TabConfig.Icon = TabConfig.Icon or ""
-		TabConfig.PremiumOnly = TabConfig.PremiumOnly or false
-
-		local TabFrame = SetChildren(SetProps(MakeElement("Button"), {
-			Size = UDim2.new(1, 0, 0, 30),
-			Parent = TabHolder
-		}), {
-			AddThemeObject(SetProps(MakeElement("Image", TabConfig.Icon), {
-				AnchorPoint = Vector2.new(0, 0.5),
-				Size = UDim2.new(0, 18, 0, 18),
-				Position = UDim2.new(0, 10, 0.5, 0),
-				ImageTransparency = 0.4,
-				Name = "Ico"
-			}), "Text"),
-			AddThemeObject(SetProps(MakeElement("Label", TabConfig.Name, 14), {
-				Size = UDim2.new(1, -35, 1, 0),
-				Position = UDim2.new(0, 35, 0, 0),
-				Font = Enum.Font.GothamSemibold,
-				TextTransparency = 0.4,
-				Name = "Title"
-			}), "Text")
-		})
-
-		if GetIcon(TabConfig.Icon) ~= nil then
-			TabFrame.Ico.Image = GetIcon(TabConfig.Icon)
-		end	
-
-				local Container = AddThemeObject(SetChildren(SetProps(MakeElement("ScrollFrame", Color3.fromRGB(255, 255, 255), 5), {
-			Size = UDim2.new(1, -150, 1, -50),
-			Position = UDim2.new(0, 150, 0, 50),
-			Parent = MainWindow,
-			Visible = false,
-			Name = "ItemContainer"
-		}), {
-			MakeElement("List", 0, 6),
-			MakeElement("Padding", 15, 10, 10, 45)
-		}), "Divider")
-
-		local SearchBarFrame = Instance.new("Frame")
-		local SearchInput = Instance.new("TextBox")
-		local SearchCorner = Instance.new("UICorner")
-
-		SearchBarFrame.Name = "SearchBarFrame"
-		SearchBarFrame.Size = UDim2.new(1, -20, 0, 30)
-		SearchBarFrame.Position = UDim2.new(0, 10, 0, 5)
-		SearchBarFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-		SearchBarFrame.Parent = Container
-
-		SearchCorner.CornerRadius = UDim.new(0, 6)
-		SearchCorner.Parent = SearchBarFrame
-
-		SearchInput.Name = "SearchInput"
-		SearchInput.Size = UDim2.new(1, -10, 1, 0)
-		SearchInput.Position = UDim2.new(0, 10, 0, 0)
-		SearchInput.BackgroundTransparency = 1
-		SearchInput.Text = ""
-		SearchInput.PlaceholderText = "Tìm kiếm tính năng..."
-		SearchInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-		SearchInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-		SearchInput.TextXAlignment = Enum.TextXAlignment.Left
-		SearchInput.TextSize = 14
-		SearchInput.Font = Enum.Font.SourceSans
-		SearchInput.Parent = SearchBarFrame
-
-		SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
-			local Query = string.lower(SearchInput.Text)
-			for _, Element in ipairs(Container:GetChildren()) do
-				if Element:IsA("Frame") and Element ~= SearchBarFrame then
-					local TitleLabel = Element:FindFirstChild("Title") or Element:FindFirstChildWhichIsA("TextLabel", true)
-					if TitleLabel then
-						local Text = string.lower(TitleLabel.Text)
-						if string.find(Text, Query) then
-							Element.Visible = true
-						else
-							Element.Visible = false
-						end
-					end
-				end
-			end
-		end)
-
 		CloseSearchBtn.MouseButton1Click:Connect(function()
 			TweenService:Create(SearchContainer, TweenInfo.new(0.20, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 32)}):Play()
 			task.delay(0.2, function()
@@ -1058,7 +819,50 @@ end)
 			MakeElement("List", 0, 6),
 			MakeElement("Padding", 15, 10, 10, 45)
 		}), "Divider")
-						
+		
+local SearchBarFrame = Instance.new("Frame")
+		local SearchInput = Instance.new("TextBox")
+		local SearchCorner = Instance.new("UICorner")
+
+		SearchBarFrame.Name = "SearchBarFrame"
+		SearchBarFrame.Size = UDim2.new(1, -20, 0, 30)
+		SearchBarFrame.Position = UDim2.new(0, 10, 0, 5)
+		SearchBarFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+		SearchBarFrame.Parent = Container
+
+		SearchCorner.CornerRadius = UDim.new(0, 6)
+		SearchCorner.Parent = SearchBarFrame
+
+		SearchInput.Name = "SearchInput"
+		SearchInput.Size = UDim2.new(1, -10, 1, 0)
+		SearchInput.Position = UDim2.new(0, 10, 0, 0)
+		SearchInput.BackgroundTransparency = 1
+		SearchInput.Text = ""
+		SearchInput.PlaceholderText = "Tìm kiếm tính năng..."
+		SearchInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+		SearchInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+		SearchInput.TextXAlignment = Enum.TextXAlignment.Left
+		SearchInput.TextSize = 14
+		SearchInput.Font = Enum.Font.SourceSans
+		SearchInput.Parent = SearchBarFrame
+
+		SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
+			local Query = string.lower(SearchInput.Text)
+			for _, Element in ipairs(Container:GetChildren()) do
+				if Element:IsA("Frame") and Element ~= SearchBarFrame then
+					local TitleLabel = Element:FindFirstChild("Title") or Element:FindFirstChildWhichIsA("TextLabel", true)
+					if TitleLabel then
+						local Text = string.lower(TitleLabel.Text)
+						if string.find(Text, Query) then
+							Element.Visible = true
+						else
+							Element.Visible = false
+						end
+					end
+				end
+			end
+		end)
+				
 		AddConnection(Container.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
 			Container.CanvasSize = UDim2.new(0, 0, 0, Container.UIListLayout.AbsoluteContentSize.Y + 30)
 		end)
