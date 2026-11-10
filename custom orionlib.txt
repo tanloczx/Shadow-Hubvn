@@ -500,27 +500,119 @@ function OrionLib:MakeWindow(WindowConfig)
 		TabHolder.CanvasSize = UDim2.new(0, 0, 0, TabHolder.UIListLayout.AbsoluteContentSize.Y + 16)
 	end)
 
-	local CloseBtn = SetChildren(SetProps(MakeElement("Button"), {
-		Size = UDim2.new(0.5, 0, 1, 0),
-		Position = UDim2.new(0.5, 0, 0, 0),
+		local CloseBtn = SetChildren(SetProps(MakeElement("Button"), {
+		Size = UDim2.new(0, 30, 1, 0),
+		Position = UDim2.new(1, -30, 0, 0),
 		BackgroundTransparency = 1
 	}), {
 		AddThemeObject(SetProps(MakeElement("Image", "rbxassetid://7072725342"), {
-			Position = UDim2.new(0, 9, 0, 6),
+			Position = UDim2.new(0, 6, 0, 6),
 			Size = UDim2.new(0, 18, 0, 18)
 		}), "Text")
 	})
 
 	local MinimizeBtn = SetChildren(SetProps(MakeElement("Button"), {
-		Size = UDim2.new(0.5, 0, 1, 0),
+		Size = UDim2.new(0, 30, 1, 0),
+		Position = UDim2.new(1, -60, 0, 0),
 		BackgroundTransparency = 1
 	}), {
 		AddThemeObject(SetProps(MakeElement("Image", "rbxassetid://7072719338"), {
-			Position = UDim2.new(0, 9, 0, 6),
+			Position = UDim2.new(0, 6, 0, 6),
 			Size = UDim2.new(0, 18, 0, 18),
 			Name = "Ico"
 		}), "Text")
 	})
+
+	local SearchBtn = SetChildren(SetProps(MakeElement("Button"), {
+		Size = UDim2.new(0, 30, 1, 0),
+		Position = UDim2.new(1, -90, 0, 0),
+		BackgroundTransparency = 1
+	}), {
+		AddThemeObject(SetProps(MakeElement("Image", "rbxassetid://6034818372"), {
+			Position = UDim2.new(0, 7, 0, 7),
+			Size = UDim2.new(0, 16, 0, 16)
+		}), "Text")
+	})
+
+	local SearchContainer = SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(30, 30, 30), 0, 6), {
+		Size = UDim2.new(0, 0, 0, 28),
+		Position = UDim2.new(1, -10, 0, 6),
+		AnchorPoint = Vector2.new(1, 0),
+		Visible = false,
+		ClipsDescendants = true,
+		ZIndex = 5
+	}), {
+		SetProps(MakeElement("Stroke"), {
+			Color = Color3.fromRGB(60, 60, 60),
+			Transparency = 0.5
+		}),
+		SetProps(MakeElement("Image", "rbxassetid://6034818372"), {
+			Size = UDim2.new(0, 14, 0, 14),
+			Position = UDim2.new(0, 8, 0.5, -7),
+			ImageColor3 = Color3.fromRGB(150, 150, 150)
+		}),
+		SetProps(MakeElement("TextBox", "", 13), {
+			Name = "SearchInput",
+			Size = UDim2.new(1, -50, 1, 0),
+			Position = UDim2.new(0, 28, 0, 0),
+			BackgroundTransparency = 1,
+			PlaceholderText = "Tìm kiếm...",
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			PlaceholderColor3 = Color3.fromRGB(130, 130, 130),
+			TextXAlignment = Enum.TextXAlignment.Left,
+			Font = Enum.Font.GothamMedium
+		}),
+		SetChildren(SetProps(MakeElement("Button"), {
+			Name = "CloseSearchBtn",
+			Size = UDim2.new(0, 24, 0, 24),
+			Position = UDim2.new(1, -26, 0.5, -12),
+			BackgroundTransparency = 1
+		}), {
+			SetProps(MakeElement("Image", "rbxassetid://6035047409"), {
+				Size = UDim2.new(0, 16, 0, 16),
+				Position = UDim2.new(0, 4, 0, 4),
+				ImageColor3 = Color3.fromRGB(180, 180, 180)
+			})
+		})
+	})
+
+	SearchBtn.MouseButton1Click:Connect(function()
+		SearchBtn.Visible = false
+		SearchContainer.Visible = true
+		TweenService:Create(SearchContainer, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 180, 0, 28)}):Play()
+		SearchContainer.SearchInput:CaptureFocus()
+	end)
+
+	SearchContainer.CloseSearchBtn.MouseButton1Click:Connect(function()
+		TweenService:Create(SearchContainer, TweenInfo.new(0.20, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 28)}):Play()
+		task.delay(0.2, function()
+			SearchContainer.Visible = false
+			SearchBtn.Visible = true
+			SearchContainer.SearchInput.Text = ""
+		end)
+		for _, Element in ipairs(Container:GetChildren()) do
+			if Element:IsA("Frame") then
+				Element.Visible = true
+			end
+		end
+	end)
+
+	SearchContainer.SearchInput:GetPropertyChangedSignal("Text"):Connect(function()
+		local Query = string.lower(SearchContainer.SearchInput.Text)
+		for _, Element in ipairs(Container:GetChildren()) do
+			if Element:IsA("Frame") and Element ~= SearchContainer then
+				local TitleLabel = Element:FindFirstChild("Content") or Element:FindFirstChildWhichIsA("TextLabel", true)
+				if TitleLabel then
+					local Text = string.lower(TitleLabel.Text)
+					if string.find(Text, Query) or Query == "" then
+						Element.Visible = true
+					else
+						Element.Visible = false
+					end
+				end
+			end
+		end
+	end)
 
 	local DragPoint = SetProps(MakeElement("TFrame"), {
 		Size = UDim2.new(1, 0, 0, 50)
@@ -585,7 +677,7 @@ function OrionLib:MakeWindow(WindowConfig)
 		}),
 	}), "Second")
 
-			local WindowName = AddThemeObject(SetProps(MakeElement("Label", WindowConfig.Name, 14), {
+	local WindowName = AddThemeObject(SetProps(MakeElement("Label", WindowConfig.Name, 14), {
 		Size = UDim2.new(1, -280, 1, 0), 
 		Position = UDim2.new(0, 15, 0, 0),
 		Font = Enum.Font.GothamBold,		
