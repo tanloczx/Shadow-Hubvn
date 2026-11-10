@@ -591,60 +591,77 @@ function OrionLib:MakeWindow(WindowConfig)
 		Font = Enum.Font.GothamBold,		
 		TextSize = 14
 	}), "Text")
-
-    	local SearchContainer = Instance.new("Frame")
+    	
+    	local SearchBtn = Instance.new("ImageButton")
+		local SearchContainer = Instance.new("Frame")
 		local SearchInput = Instance.new("TextBox")
 		local SearchIcon = Instance.new("ImageLabel")
 		local CloseSearchBtn = Instance.new("ImageButton")
 		local SearchCorner = Instance.new("UICorner")
 
+		SearchBtn.Name = "SearchBtn"
+		SearchBtn.Size = UDim2.new(0, 24, 0, 24)
+		SearchBtn.Position = UDim2.new(1, -75, 0, 8)
+		SearchBtn.BackgroundTransparency = 1
+		SearchBtn.Image = "rbxassetid://6034818372"
+		SearchBtn.ImageColor3 = Color3.fromRGB(200, 200, 200)
+		SearchBtn.Parent = TopBar
+
 		SearchContainer.Name = "SearchContainer"
-		SearchContainer.Size = UDim2.new(0, 140, 0, 26)
-		SearchContainer.Position = UDim2.new(1, -110, 0, 7)
-		SearchContainer.AnchorPoint = Vector2.new(0, 0)
-		SearchContainer.BackgroundColor3 = Color3.fromRGB(20, 24, 33) -- Màu tối Aurora Hub
-		SearchContainer.Visible = true
+		SearchContainer.Size = UDim2.new(0, 0, 0, 32)
+		SearchContainer.Position = UDim2.new(1, -10, 0, 4)
+		SearchContainer.AnchorPoint = Vector2.new(1, 0)
+		SearchContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+		SearchContainer.Visible = false
 		SearchContainer.ClipsDescendants = true
-		SearchContainer.ZIndex = 15
-		SearchContainer.Parent = WindowName.Parent
+		SearchContainer.Parent = TopBar
 
 		SearchCorner.CornerRadius = UDim.new(0, 6)
 		SearchCorner.Parent = SearchContainer
 
 		SearchIcon.Name = "SearchIcon"
-		SearchIcon.Size = UDim2.new(0, 13, 0, 13)
-		SearchIcon.Position = UDim2.new(0, 8, 0.5, -6)
+		SearchIcon.Size = UDim2.new(0, 16, 0, 16)
+		SearchIcon.Position = UDim2.new(0, 8, 0.5, -8)
 		SearchIcon.BackgroundTransparency = 1
 		SearchIcon.Image = "rbxassetid://6034818372"
-		SearchIcon.ImageColor3 = Color3.fromRGB(140, 150, 165)
-		SearchIcon.ZIndex = 16
+		SearchIcon.ImageColor3 = Color3.fromRGB(150, 150, 150)
 		SearchIcon.Parent = SearchContainer
 
 		SearchInput.Name = "SearchInput"
-		SearchInput.Size = UDim2.new(1, -40, 1, 0)
-		SearchInput.Position = UDim2.new(0, 25, 0, 0)
+		SearchInput.Size = UDim2.new(1, -60, 1, 0)
+		SearchInput.Position = UDim2.new(0, 30, 0, 0)
 		SearchInput.BackgroundTransparency = 1
 		SearchInput.Text = ""
-		SearchInput.PlaceholderText = "Tìm kiếm..."
-		SearchInput.TextColor3 = Color3.fromRGB(240, 240, 240)
-		SearchInput.PlaceholderColor3 = Color3.fromRGB(110, 120, 135)
+		SearchInput.PlaceholderText = "Tìm kiếm tính năng..."
+		SearchInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+		SearchInput.PlaceholderColor3 = Color3.fromRGB(130, 130, 130)
 		SearchInput.TextXAlignment = Enum.TextXAlignment.Left
-		SearchInput.TextSize = 12
+		SearchInput.TextSize = 13
 		SearchInput.Font = Enum.Font.GothamMedium
-		SearchInput.ZIndex = 16
 		SearchInput.Parent = SearchContainer
 
 		CloseSearchBtn.Name = "CloseSearchBtn"
-		CloseSearchBtn.Size = UDim2.new(0, 16, 0, 16)
-		CloseSearchBtn.Position = UDim2.new(1, -18, 0.5, -8)
+		CloseSearchBtn.Size = UDim2.new(0, 20, 0, 20)
+		CloseSearchBtn.Position = UDim2.new(1, -25, 0.5, -10)
 		CloseSearchBtn.BackgroundTransparency = 1
 		CloseSearchBtn.Image = "rbxassetid://6035047409"
-		CloseSearchBtn.ImageColor3 = Color3.fromRGB(160, 170, 185)
-		CloseSearchBtn.ZIndex = 16
+		CloseSearchBtn.ImageColor3 = Color3.fromRGB(180, 180, 180)
 		CloseSearchBtn.Parent = SearchContainer
-		
+
+		SearchBtn.MouseButton1Click:Connect(function()
+			SearchBtn.Visible = false
+			SearchContainer.Visible = true
+			TweenService:Create(SearchContainer, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 220, 0, 32)}):Play()
+			SearchInput:CaptureFocus()
+		end)
+
 		CloseSearchBtn.MouseButton1Click:Connect(function()
-			SearchInput.Text = ""
+			TweenService:Create(SearchContainer, TweenInfo.new(0.20, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 32)}):Play()
+			task.delay(0.2, function()
+				SearchContainer.Visible = false
+				SearchBtn.Visible = true
+				SearchInput.Text = ""
+			end)
 			for _, Element in ipairs(Container:GetChildren()) do
 				if Element:IsA("Frame") then
 					Element.Visible = true
