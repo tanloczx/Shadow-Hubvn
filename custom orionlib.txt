@@ -595,6 +595,7 @@ function OrionLib:MakeWindow(WindowConfig)
 			MakeElement("List", 0, 6),
 			MakeElement("Padding", 15, 10, 10, 45)
 		}), "Divider")
+		)
 
 		local SearchBarFrame = Instance.new("Frame")
 		local SearchInput = Instance.new("TextBox")
