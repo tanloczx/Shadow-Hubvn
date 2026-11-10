@@ -1069,7 +1069,7 @@ end)
 				end	
 				return Toggle
 			end  
-				function ElementFunction:AddSlider(SliderConfig)
+		    	function ElementFunction:AddSlider(SliderConfig)
 				SliderConfig = SliderConfig or {}
 				SliderConfig.Name = SliderConfig.Name or "Slider"
 				SliderConfig.Min = SliderConfig.Min or 0
@@ -1149,12 +1149,13 @@ end)
 
 				ValueBox.FocusLost:Connect(function(EnterPressed)
 					if EnterPressed then
-						local Num = tonumber(ValueBox.Text)
+						local CleanText = ValueBox.Text:gsub("%D+", "")
+						local Num = tonumber(CleanText) or tonumber(ValueBox.Text)
 						if Num then
 							Slider:Set(Num)
 							SaveCfg(game.GameId)
 						else
-							ValueBox.Text = tostring(self.Value) .. " " .. SliderConfig.ValueName
+							ValueBox.Text = tostring(Slider.Value) .. " " .. SliderConfig.ValueName
 						end
 					end
 				end)
