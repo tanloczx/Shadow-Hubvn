@@ -987,7 +987,7 @@ end)
 
 				return Button
 			end    
-			function ElementFunction:AddToggle(ToggleConfig)
+				function ElementFunction:AddToggle(ToggleConfig)
 				ToggleConfig = ToggleConfig or {}
 				ToggleConfig.Name = ToggleConfig.Name or "Toggle"
 				ToggleConfig.Default = ToggleConfig.Default or false
@@ -1002,23 +1002,23 @@ end)
 					Size = UDim2.new(1, 0, 1, 0)
 				})
 
-				local ToggleBox = SetChildren(SetProps(MakeElement("RoundFrame", ToggleConfig.Color, 0, 4), {
-					Size = UDim2.new(0, 24, 0, 24),
-					Position = UDim2.new(1, -24, 0.5, 0),
-					AnchorPoint = Vector2.new(0.5, 0.5)
+				local ToggleKnob = SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 10), {
+					Size = UDim2.new(0, 14, 0, 14),
+					Position = UDim2.new(0, 3, 0.5, 0),
+					AnchorPoint = Vector2.new(0, 0.5)
+				})
+
+				local ToggleBox = SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(45, 45, 45), 0, 10), {
+					Size = UDim2.new(0, 40, 0, 20),
+					Position = UDim2.new(1, -16, 0.5, 0),
+					AnchorPoint = Vector2.new(1, 0.5)
 				}), {
 					SetProps(MakeElement("Stroke"), {
-						Color = ToggleConfig.Color,
+						Color = Color3.fromRGB(60, 60, 60),
 						Name = "Stroke",
 						Transparency = 0.5
 					}),
-					SetProps(MakeElement("Image", "rbxassetid://3944680095"), {
-						Size = UDim2.new(0, 20, 0, 20),
-						AnchorPoint = Vector2.new(0.5, 0.5),
-						Position = UDim2.new(0.5, 0, 0.5, 0),
-						ImageColor3 = Color3.fromRGB(255, 255, 255),
-						Name = "Ico"
-					}),
+					ToggleKnob
 				})
 
 				local ToggleFrame = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 5), {
@@ -1026,7 +1026,7 @@ end)
 					Parent = ItemParent
 				}), {
 					AddThemeObject(SetProps(MakeElement("Label", ToggleConfig.Name, 15), {
-						Size = UDim2.new(1, -12, 1, 0),
+						Size = UDim2.new(1, -60, 1, 0),
 						Position = UDim2.new(0, 12, 0, 0),
 						Font = Enum.Font.GothamBold,
 						Name = "Content"
@@ -1038,9 +1038,9 @@ end)
 
 				function Toggle:Set(Value)
 					Toggle.Value = Value
-					TweenService:Create(ToggleBox, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = Toggle.Value and ToggleConfig.Color or OrionLib.Themes.Default.Divider}):Play()
-					TweenService:Create(ToggleBox.Stroke, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Color = Toggle.Value and ToggleConfig.Color or OrionLib.Themes.Default.Stroke}):Play()
-					TweenService:Create(ToggleBox.Ico, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = Toggle.Value and 0 or 1, Size = Toggle.Value and UDim2.new(0, 20, 0, 20) or UDim2.new(0, 8, 0, 8)}):Play()
+					TweenService:Create(ToggleBox, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundColor3 = Toggle.Value and ToggleConfig.Color or Color3.fromRGB(45, 45, 45)}):Play()
+					TweenService:Create(ToggleBox.Stroke, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Color = Toggle.Value and ToggleConfig.Color or Color3.fromRGB(60, 60, 60)}):Play()
+					TweenService:Create(ToggleKnob, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = Toggle.Value and UDim2.new(1, -17, 0.5, 0) or UDim2.new(0, 3, 0.5, 0), BackgroundColor3 = Toggle.Value and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(180, 180, 180)}):Play()
 					ToggleConfig.Callback(Toggle.Value)
 				end    
 
@@ -1068,7 +1068,7 @@ end)
 					OrionLib.Flags[ToggleConfig.Flag] = Toggle
 				end	
 				return Toggle
-			end  
+			end
 		    	function ElementFunction:AddSlider(SliderConfig)
 				SliderConfig = SliderConfig or {}
 				SliderConfig.Name = SliderConfig.Name or "Slider"
@@ -1103,27 +1103,24 @@ end)
 					SliderDrag
 				})
 
-				local ValueBox = SetProps(MakeElement("TextBox", tostring(SliderConfig.Default), 13), {
-					Size = UDim2.new(0, 65, 0, 20),
-					Position = UDim2.new(1, -77, 0, 7),
-					Font = Enum.Font.GothamMedium,
-					Name = "ValueBox",
-					TextXAlignment = Enum.TextXAlignment.Right,
-					BackgroundTransparency = 1,
-					ClearTextOnFocus = false
-				})
-
 				local SliderFrame = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255, 255, 255), 0, 4), {
 					Size = UDim2.new(1, 0, 0, 50),
 					Parent = ItemParent
 				}), {
 					AddThemeObject(SetProps(MakeElement("Label", SliderConfig.Name, 14), {
-						Size = UDim2.new(1, -80, 0, 14),
+						Size = UDim2.new(1, -60, 0, 14),
 						Position = UDim2.new(0, 12, 0, 10),
 						Font = Enum.Font.GothamBold,
 						Name = "Content"
 					}), "Text"),
-					AddThemeObject(ValueBox, "Text"),
+					AddThemeObject(SetProps(MakeElement("Label", "value", 13), {
+						Size = UDim2.new(0, 50, 0, 14),
+						Position = UDim2.new(1, -62, 0, 10),
+						Font = Enum.Font.GothamMedium,
+						Name = "ValueRight",
+						TextXAlignment = Enum.TextXAlignment.Right,
+						TextTransparency = 0.2
+					}), "Text"),
 					AddThemeObject(MakeElement("Stroke"), "Stroke"),
 					SliderBar
 				}), "Second")
@@ -1147,23 +1144,12 @@ end)
 					end
 				end)
 
-				ValueBox.FocusLost:Connect(function(EnterPressed)
-					if EnterPressed then
-						local CleanText = ValueBox.Text:gsub("%D+", "")
-						local Num = tonumber(CleanText) or tonumber(ValueBox.Text)
-						if Num then
-							Slider:Set(Num)
-							SaveCfg(game.GameId)
-						else
-							ValueBox.Text = tostring(Slider.Value) .. " " .. SliderConfig.ValueName
-						end
-					end
-				end)
-
 				function Slider:Set(Value)
 					self.Value = math.clamp(Round(Value, SliderConfig.Increment), SliderConfig.Min, SliderConfig.Max)
 					TweenService:Create(SliderDrag,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = UDim2.fromScale((self.Value - SliderConfig.Min) / (SliderConfig.Max - SliderConfig.Min), 1)}):Play()
-					ValueBox.Text = tostring(self.Value) .. " " .. SliderConfig.ValueName
+					if SliderFrame:FindFirstChild("ValueRight") then
+						SliderFrame.ValueRight.Text = tostring(self.Value) .. " " .. SliderConfig.ValueName
+					end
 					SliderConfig.Callback(self.Value)
 				end      
 
