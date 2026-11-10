@@ -797,7 +797,7 @@ end)
 			MakeElement("Padding", 15, 10, 10, 45)
 		}), "Divider")
 
-				local SearchBtn = Instance.new("ImageButton")
+						local SearchBtn = Instance.new("ImageButton")
 		local SearchContainer = Instance.new("Frame")
 		local SearchInput = Instance.new("TextBox")
 		local SearchIcon = Instance.new("ImageLabel")
@@ -806,10 +806,11 @@ end)
 
 		SearchBtn.Name = "SearchBtn"
 		SearchBtn.Size = UDim2.new(0, 24, 0, 24)
-		SearchBtn.Position = UDim2.new(1, -75, 0, 8)
+		SearchBtn.Position = UDim2.new(1, -95, 0, 8)
 		SearchBtn.BackgroundTransparency = 1
 		SearchBtn.Image = "rbxassetid://6034818372"
 		SearchBtn.ImageColor3 = Color3.fromRGB(200, 200, 200)
+		SearchBtn.ZIndex = 5
 		SearchBtn.Parent = TopBar
 
 		SearchContainer.Name = "SearchContainer"
@@ -819,6 +820,7 @@ end)
 		SearchContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 		SearchContainer.Visible = false
 		SearchContainer.ClipsDescendants = true
+		SearchContainer.ZIndex = 5
 		SearchContainer.Parent = TopBar
 
 		SearchCorner.CornerRadius = UDim.new(0, 6)
@@ -830,6 +832,7 @@ end)
 		SearchIcon.BackgroundTransparency = 1
 		SearchIcon.Image = "rbxassetid://6034818372"
 		SearchIcon.ImageColor3 = Color3.fromRGB(150, 150, 150)
+		SearchIcon.ZIndex = 6
 		SearchIcon.Parent = SearchContainer
 
 		SearchInput.Name = "SearchInput"
@@ -843,6 +846,7 @@ end)
 		SearchInput.TextXAlignment = Enum.TextXAlignment.Left
 		SearchInput.TextSize = 13
 		SearchInput.Font = Enum.Font.GothamMedium
+		SearchInput.ZIndex = 6
 		SearchInput.Parent = SearchContainer
 
 		CloseSearchBtn.Name = "CloseSearchBtn"
@@ -851,12 +855,13 @@ end)
 		CloseSearchBtn.BackgroundTransparency = 1
 		CloseSearchBtn.Image = "rbxassetid://6035047409"
 		CloseSearchBtn.ImageColor3 = Color3.fromRGB(180, 180, 180)
+		CloseSearchBtn.ZIndex = 6
 		CloseSearchBtn.Parent = SearchContainer
 
 		SearchBtn.MouseButton1Click:Connect(function()
 			SearchBtn.Visible = false
 			SearchContainer.Visible = true
-			TweenService:Create(SearchContainer, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 220, 0, 32)}):Play()
+			TweenService:Create(SearchContainer, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 200, 0, 32)}):Play()
 			SearchInput:CaptureFocus()
 		end)
 
